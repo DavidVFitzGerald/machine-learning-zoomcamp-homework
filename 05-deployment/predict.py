@@ -1,9 +1,43 @@
 
-from typing import Any
+from typing import Any, Literal
 
 import pickle
 from fastapi import FastAPI
 import uvicorn
+from pydantic import BaseModel, Field
+
+
+class Customer(BaseModel):
+    gender: Literal["male", "female"]
+    seniorcitizen: Literal[0, 1]
+    partner: Literal["yes", "no"]
+    dependents: Literal["yes", "no"]
+    phoneservice: Literal["yes", "no"]
+    multiplelines: Literal["yes", "no", "no_phone_service"]
+    internetservice: Literal["dsl", "fiber_optic", "no"]
+    onlinesecurity: Literal["yes", "no", "no_internet_service"]
+    onlinebackup: Literal["yes", "no", "no_internet_service"]
+    deviceprotection: Literal["yes", "no", "no_internet_service"]
+    techsupport: Literal["yes", "no", "no_internet_service"]
+    streamingtv: Literal["yes", "no", "no_internet_service"]
+    streamingmovies: Literal["yes", "no", "no_internet_service"]
+    contract: Literal["month-to-month", "one_year", "two_year"]
+    paperlessbilling: Literal["yes", "no"]
+    paymentmethod: Literal[
+        "electronic_check",
+        "mailed_check",
+        "bank_transfer_(automatic)",
+        "credit_card_(automatic)"
+    ]
+    tenure: int = Field(..., ge=0)
+    monthlycharges: float = Field(..., ge=0.0)
+    totalcharges: float = Field(..., ge=0.0)
+
+
+class PredictResponse(BaseModel):
+    churn_probability: float
+    churn: bool
+
 
 app = FastAPI(title="churn-prediction")
 
@@ -18,13 +52,13 @@ def predict_single(customer):
 
 
 @app.post("/predict")
-def predict(customer: dict[str, Any]):
-    prob = predict_single(customer)
+def predict(customer: Customer) -> PredictResponse:
+    prob = predict_single(customer.model_dump())
 
-    return {
-        "churn_probability": prob,
-        "churn": bool(prob >= 0.5)
-    }
+    return PredictResponse(
+        churn_probability=prob,
+        churn=bool(prob >= 0.5)
+    )
 
 
 if __name__ == "__main__":
