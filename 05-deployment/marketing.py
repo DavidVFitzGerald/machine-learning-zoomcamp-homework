@@ -1,6 +1,7 @@
 import requests
 
-url = "http://localhost:9696/predict"
+# url = "http://localhost:9696/predict"
+url = "https://summer-sunset-6221.fly.dev/predict"
 customer = {
     "gender": "male",
     "seniorcitizen": 0,
