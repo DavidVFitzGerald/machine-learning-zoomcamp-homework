@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.12.2025.12.05.08-x86_64
+FROM public.ecr.aws/lambda/python:3.13
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
 
 COPY pyproject.toml uv.lock ./

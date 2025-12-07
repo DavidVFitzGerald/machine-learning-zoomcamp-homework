@@ -14,7 +14,7 @@ aws ecr get-login-password \
   --password-stdin ${ECR_URL}
 
 
-docker build -t ${LOCAL_IMAGE} .
+docker build --platform linux/amd64 --provenance false -t ${LOCAL_IMAGE} .
 docker tag ${LOCAL_IMAGE} ${REMOTE_IMAGE_TAG}
 docker push ${REMOTE_IMAGE_TAG}
 
