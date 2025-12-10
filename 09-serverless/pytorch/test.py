@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://localhost:8080/2015-03-31/functions/function/invocations'
+url = "https://ewvhdmq9x9.execute-api.ap-southeast-2.amazonaws.com/test/predict"
 
 request = {"url": "http://bit.ly/mlbookcamp-pants"}
 
